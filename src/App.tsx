@@ -1,25 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import { getData } from './Services/APIService';
 
 function App() {
+  const urls = ['https://cat-fact.herokuapp.com/facts/random?animal_type=cat&amount=1', 'https://geek-jokes.sameerkumar.website/api?format=json', 'https://api.thedogapi.com/v1/images/search'];
+  const [dataArray, setDataArray] = useState<any>([]);
+  
+  useEffect(
+    () => {
+      getData(urls)
+      .then(data => {
+        setDataArray(data)
+      })
+      
+    }, []
+  )
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+     <table className='table'>
+        <thead className='thead'>
+          <tr>
+            <th>URL</th>
+            <th>Response</th>
+          </tr>
+        </thead>
+      
+        <tbody className='tbody'>
+          {urls.map((url, index) => {
+            return(
+              <tr key={index}>
+                <td>{url}</td>
+                <td>{JSON.stringify(dataArray[index])}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+     </table>
+    </>
   );
 }
 
